@@ -4,39 +4,49 @@ import 'package:get/get.dart';
 
 void main() => runApp(MyApp());
 
+List<String> lists = [];
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'project',
+        debugShowCheckedModeBanner: false, //앱 상단에 debug 표시 삭제
+        title: 'project', //앱 이름
         theme: ThemeData(
+          // 특정 색을 음영으로 가짐
             primarySwatch: Colors.grey),
-        home: MyHomepage());
+        home: MyHomePage());
   }
 }
 
 
-class MyHomepage extends StatelessWidget {
-  const MyHomepage({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+class _MyHomePageState extends State<MyHomePage> {
+
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
 
+    return Scaffold(
+      //여러가지를 배치하다.
       appBar: AppBar(
-          title: Text('커뮤니티'),
-          centerTitle: true,
+          title: Text('POSTS'), //앱상에 보여지는 타이틀 이름
+          centerTitle: true, // 텍스트 중앙에 배치
           backgroundColor: Colors.white24),
 
       body: Center(
         //Center, Column, children 계층구조
         child: Column(children: [
-          Text('Posts'),
+          SizedBox(height: 40),
           ElevatedButton(
-              child: Text("게시물 작성"),
+              child: Text("게시물 작성"), //ElevatedButton 기본요소:Text, onPressed
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -44,14 +54,14 @@ class MyHomepage extends StatelessWidget {
                   ))),
           Expanded(
             child: ListView.separated(
-              itemCount: 3,
-              itemBuilder: (context, index) {
+              itemCount:  lists.length,
+              itemBuilder: (context,index) {
                 return ListTile(
                   onTap: () {
-                    Get.to(posting(index));
+                    Get.to(Writing());
                   },
-                  title: Text("제목1"),
-                  leading: Text('1'),
+                  title: Text(lists[index]),
+                  leading: Text('-'),
                 );
               },
               separatorBuilder: (context, index) {
@@ -70,7 +80,7 @@ class MyHomepage extends StatelessWidget {
                 accountName: Text('HANEUL LEE'),
                 accountEmail: Text("haneul@naver.com")),
             ListTile(
-              title: const Text('Home(기능 X)'),
+              title: const Text('Home'),
               onTap: () {},
             ),
             ListTile(
@@ -79,7 +89,7 @@ class MyHomepage extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyHomepage(),
+                      builder: (context) => MyHomePage(),
                     ));
               },
             ),
@@ -105,7 +115,9 @@ class MyHomepage extends StatelessWidget {
 }
 
 
-class Updating extends StatelessWidget { //수정 Page
+
+class Updating extends StatelessWidget {
+  //수정 Page
   const Updating({Key? key}) : super(key: key);
 
   @override
@@ -126,18 +138,17 @@ class Updating extends StatelessWidget { //수정 Page
             ),
           ),
           SizedBox(height: 20),
-          Text('내용'),
+          Text('작성자 : haneul'),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 5, 5, 5), //상하좌우 여백
-            child: Expanded(
-              // 내용이 많으면 깨지니까 깨짐 방지
-              child: SingleChildScrollView( // 11줄 이상 내용이 기재되어도 출력가능
-                child: TextFormField(
-                  maxLines: 10,
-                  decoration: InputDecoration(
-                    labelText: 'contents',
-                    border: OutlineInputBorder(),
-                  ),
+            // 내용이 많으면 깨지니까 깨짐 방지
+            child: SingleChildScrollView(
+              // 11줄 이상 내용이 기재되어도 출력가능
+              child: TextFormField(
+                maxLines: 10,
+                decoration: InputDecoration(
+                  labelText: 'contents',
+                  border: OutlineInputBorder(),
                 ),
               ),
             ),
@@ -145,18 +156,17 @@ class Updating extends StatelessWidget { //수정 Page
           Row(children: [
             ElevatedButton(
               onPressed: () {
-                Get.to(MyHomepage());
+                Get.to(MyHomePage());
               },
               child: Text("등록"),
             ),
-
+            SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                Get.to(MyHomepage());
+                Get.off(MyHomePage());
               },
               child: Text("참여"),
             ),
-
             SizedBox(width: 10), //사이 띄우기
             ElevatedButton(
               onPressed: () {
@@ -167,7 +177,7 @@ class Updating extends StatelessWidget { //수정 Page
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                Get.off(MyHomepage());
+                Get.off(MyHomePage());
               },
               child: Text("삭제"),
             ),
@@ -178,8 +188,16 @@ class Updating extends StatelessWidget { //수정 Page
   }
 }
 
-class Writing extends StatelessWidget {
+class Writing extends StatefulWidget {
   const Writing({Key? key}) : super(key: key);
+
+  @override
+  State<Writing> createState() => WritingState();
+}
+
+class WritingState extends State<Writing> {
+  @override
+  String sav = "not";
 
   @override
   Widget build(BuildContext context) {
@@ -187,29 +205,47 @@ class Writing extends StatelessWidget {
       appBar: AppBar(),
       body: Column(
         children: <Widget>[
-          SizedBox(height: 20),
-          Text('제목'),
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  //Get.to(MyHomePage());
+                },
+                child: Text("참여 인원 보기"),
+              ),
+            ],
+          ),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
             child: TextField(
               decoration: InputDecoration(
                   labelText: 'title',
-                  border: OutlineInputBorder(),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30)
+                  ),
                   contentPadding: EdgeInsets.all(10)),
+              onChanged: (text) {
+                setState(() {
+                  sav = text;
+                });
+              },
             ),
           ),
           SizedBox(height: 20),
-          Text('내용'),
+          Text('작성자 : haneul'),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 5, 5, 5), //상하좌우 여백
-            child: Expanded(
-              // 내용이 많으면 깨지니까 깨짐 방지
-              child: SingleChildScrollView( // 11줄 이상 내용이 기재되어도 출력가능
-                child: TextFormField(
-                  maxLines: 10,
-                  decoration: InputDecoration(
-                    labelText: 'contents',
-                    border: OutlineInputBorder(),
+            // 내용이 많으면 깨지니까 깨짐 방지
+            child: SingleChildScrollView(
+              // 11줄 이상 내용이 기재되어도 출력가능
+              child: TextFormField(
+                maxLines: 10,
+                decoration: InputDecoration(
+                  labelText: 'contents',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(0)
                   ),
                 ),
               ),
@@ -218,11 +254,18 @@ class Writing extends StatelessWidget {
           Row(children: [
             ElevatedButton(
               onPressed: () {
-                Get.off(MyHomepage());
+                lists.add('$sav');
+                Get.to(MyHomePage());
+              },
+              child: Text("등록"),
+            ),
+            SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Get.to(MyHomePage());
               },
               child: Text("참여"),
             ),
-
             SizedBox(width: 10), //사이 띄우기
             ElevatedButton(
               onPressed: () {
@@ -233,7 +276,7 @@ class Writing extends StatelessWidget {
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                Get.off(MyHomepage());
+                print('$sav');
               },
               child: Text("삭제"),
             ),
@@ -241,55 +284,6 @@ class Writing extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class posting extends StatelessWidget {
-  final int id;
-
-  const posting(this.id);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(children: [
-            Text("글 제목"),
-            Row(children: [
-              ElevatedButton(
-                onPressed: () {
-                  Get.off(MyHomepage());
-                },
-
-                child: Text("참여"),
-              ),
-
-              SizedBox(width: 10), //사이 띄우기
-              ElevatedButton(
-                onPressed: () {
-                  Get.to(Updating());
-                },
-                child: Text("수정"),
-              ),
-              SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () {
-                  Get.off(MyHomepage());
-                },
-                child: Text("삭제"),
-              ),
-            ]),
-            Expanded(
-              // 내용이 많으면 깨지니까 깨짐 방지
-              child: SingleChildScrollView(
-                //스크롤 역할
-                child: Text("글 내용" * 50),
-              ),
-            ),
-          ]),
-        ));
   }
 }
 
