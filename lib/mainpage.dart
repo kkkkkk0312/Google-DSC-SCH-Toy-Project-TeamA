@@ -18,7 +18,10 @@ class main_page extends StatelessWidget {
     '초보여도 상관 없습니다. flutter 같이 공부하실 분 찾습니다.',
     '간단한 계시판 만들 팀원 구해요.',
     '같이 다이어리 어플 만드실 팀원 구합니다.',
-    '앱 배포까지 함께갈 팀원 구해요.'
+    '앱 배포까지 함께갈 팀원 구해요.',
+    '이번에 GDSC 해커톤 대회에 함께 나갈 동료 구합니다.',
+    'GDSC KR WinterCup에 참여하고 싶은 사람을 모집합니다.',
+    '트랜디한 팝업 스토어 어플을 만들고 있습니다.'
   ];
   final List<String> participate_title = <String>[
     'AI 개발할 팀원 구합니다.',
@@ -82,8 +85,46 @@ class main_page extends StatelessWidget {
                                   td.day.toString() +
                                   "일",
                               style: TextStyle(fontSize: titleFontSize)),
-                          Text("\내가 참여한 프로젝트 보기",
-                              style: TextStyle(fontSize: titleFontSize)),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Text(
+                                "\POST",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              Card(
+                                shape: RoundedRectangleBorder(
+                                  //모서리를 둥글게 하기 위해 사용
+                                  borderRadius: BorderRadius.circular(16.0),
+                                ),
+                                color: Color(color_gray),
+                                elevation: 0, // 그림자 깊이
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => MyApp()));
+                                  },
+
+                                  // 로그인 버튼
+                                  child: Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(5),
+                                      width: getMobileSizeFromPercent(
+                                          context, 30, true),
+                                      height: getMobileSizeFromPercent(
+                                          context, 4, false),
+                                      child: Text(
+                                        "계시글 작성",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        ),
+                                      )),
+                                ),
+                              ),
+                            ],
+                          ),
                           Container(
                             height: 5,
                           ),
