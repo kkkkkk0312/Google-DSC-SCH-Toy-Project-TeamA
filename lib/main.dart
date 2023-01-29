@@ -48,6 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               // 화면 이동 버튼, 새로운 페이지 만들때마다 복사해서 사용
+
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(context,
