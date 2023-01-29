@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 void main() => runApp(MyApp());
 
 List<String> lists = [];
+String s = '';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -28,25 +29,22 @@ class MyHomePage extends StatefulWidget {
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
+
 class _MyHomePageState extends State<MyHomePage> {
-
-
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       //여러가지를 배치하다.
       appBar: AppBar(
-          title: Text('POSTS'), //앱상에 보여지는 타이틀 이름
-          centerTitle: true, // 텍스트 중앙에 배치
+          title: Text('POSTS'),
+          centerTitle: true,
           backgroundColor: Colors.white24),
 
       body: Center(
-        //Center, Column, children 계층구조
         child: Column(children: [
           SizedBox(height: 40),
           ElevatedButton(
-              child: Text("게시물 작성"), //ElevatedButton 기본요소:Text, onPressed
+              child: Text("게시물 작성"),
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -54,10 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
                   ))),
           Expanded(
             child: ListView.separated(
-              itemCount:  lists.length,
-              itemBuilder: (context,index) {
+              itemCount: lists.length,
+              itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {
+                    s = lists[index];
+                    print('$s');
                     Get.to(Writing());
                   },
                   title: Text(lists[index]),
@@ -114,7 +114,118 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+class Writing extends StatefulWidget {
+  const Writing({Key? key}) : super(key: key);
 
+  @override
+  State<Writing> createState() => WritingState();
+}
+
+class WritingState extends State<Writing> {
+  int count = 0;
+  String sav = "not";
+  TextEditingController title = TextEditingController(text: '$s');
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Column(
+        children: <Widget>[
+          SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  //Get.to(MyHomePage());
+                },
+                child: Text("참여 인원 보기"),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+            child: TextField(
+              controller: title,
+              decoration: InputDecoration(
+                  labelText: 'title',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                  contentPadding: EdgeInsets.all(10)),
+              onChanged: (text) {
+                //onChanged를 이용하여 값 저장
+                setState(() {
+                  sav = text;
+                });
+              },
+            ),
+          ),
+          SizedBox(height: 20),
+          Row(children: [
+            Text('작성자 : haneul'),
+            SizedBox(width: 30),
+            IconButton(
+              onPressed: () {},
+              icon: Icon(Icons.people),
+            ),
+            Text('$count/5'),
+          ]),
+          Padding(
+            padding: EdgeInsets.fromLTRB(5, 5, 5, 5), //상하좌우 여백
+            // 내용이 많으면 깨지니까 깨짐 방지
+            child: SingleChildScrollView(
+              // 11줄 이상 내용이 기재되어도 출력가능
+              child: TextFormField(
+                maxLines: 10,
+                decoration: InputDecoration(
+                  labelText: 'contents',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(0)),
+                ),
+              ),
+            ),
+          ),
+          Row(children: [
+            ElevatedButton(
+              onPressed: () {
+                lists.add('$sav');
+                Get.to(MyHomePage());
+              },
+              child: Text("등록"),
+            ),
+            SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  count++;
+                });
+                // Get.to(MyHomePage());
+              },
+              child: Text("참여"),
+            ),
+            SizedBox(width: 10), //사이 띄우기
+            ElevatedButton(
+              onPressed: () {
+                Get.to(Updating());
+              },
+              child: Text("수정"),
+            ),
+            SizedBox(width: 10),
+            ElevatedButton(
+              onPressed: () {
+                print('$sav');
+                lists.remove('$s');
+                Get.to(MyHomePage());
+              },
+              child: Text("삭제"),
+            ),
+          ]),
+        ],
+      ),
+    );
+  }
+}
 
 class Updating extends StatelessWidget {
   //수정 Page
@@ -178,105 +289,6 @@ class Updating extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 Get.off(MyHomePage());
-              },
-              child: Text("삭제"),
-            ),
-          ]),
-        ],
-      ),
-    );
-  }
-}
-
-class Writing extends StatefulWidget {
-  const Writing({Key? key}) : super(key: key);
-
-  @override
-  State<Writing> createState() => WritingState();
-}
-
-class WritingState extends State<Writing> {
-  @override
-  String sav = "not";
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: <Widget>[
-          SizedBox(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  //Get.to(MyHomePage());
-                },
-                child: Text("참여 인원 보기"),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
-            child: TextField(
-              decoration: InputDecoration(
-                  labelText: 'title',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30)
-                  ),
-                  contentPadding: EdgeInsets.all(10)),
-              onChanged: (text) {
-                setState(() {
-                  sav = text;
-                });
-              },
-            ),
-          ),
-          SizedBox(height: 20),
-          Text('작성자 : haneul'),
-          Padding(
-            padding: EdgeInsets.fromLTRB(5, 5, 5, 5), //상하좌우 여백
-            // 내용이 많으면 깨지니까 깨짐 방지
-            child: SingleChildScrollView(
-              // 11줄 이상 내용이 기재되어도 출력가능
-              child: TextFormField(
-                maxLines: 10,
-                decoration: InputDecoration(
-                  labelText: 'contents',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(0)
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Row(children: [
-            ElevatedButton(
-              onPressed: () {
-                lists.add('$sav');
-                Get.to(MyHomePage());
-              },
-              child: Text("등록"),
-            ),
-            SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: () {
-                // Get.to(MyHomePage());
-              },
-              child: Text("참여"),
-            ),
-            SizedBox(width: 10), //사이 띄우기
-            ElevatedButton(
-              onPressed: () {
-                Get.to(Updating());
-              },
-              child: Text("수정"),
-            ),
-            SizedBox(width: 10),
-            ElevatedButton(
-              onPressed: () {
-                print('$sav');
               },
               child: Text("삭제"),
             ),
