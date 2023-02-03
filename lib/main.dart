@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_sch_teama_project/Login.dart';
+import 'package:gdsc_sch_teama_project/SignUp.dart';
 import 'package:gdsc_sch_teama_project/mainpage.dart';
 import 'package:gdsc_sch_teama_project/testp.dart';
 import 'view_mywriting.dart';
 import 'view_myparticipation.dart';
 import 'mainpage.dart';
 import 'testp.dart';
+import 'project.dart';
 import 'package:flutter/cupertino.dart';
 import 'getMediaQuery.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +78,24 @@ class _MyHomePageState extends State<MyHomePage> {
                         context, MaterialPageRoute(builder: (_) => testp()));
                   },
                   child: Text("testp")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => project()));
+                  },
+                  child: Text("project")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => SignIn()));
+                  },
+                  child: Text("login")),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => SignUp()));
+                  },
+                  child: Text("signup")),
             ],
           ),
         ),

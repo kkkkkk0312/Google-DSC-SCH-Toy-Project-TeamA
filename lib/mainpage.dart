@@ -1,3 +1,6 @@
+import 'package:gdsc_sch_teama_project/project.dart';
+import 'package:gdsc_sch_teama_project/view_postdetail.dart';
+
 import 'main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +107,7 @@ class main_page extends StatelessWidget {
                                     Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (_) => MyApp()));
+                                            builder: (_) => postdetail()));
                                   },
 
                                   // 로그인 버튼
@@ -157,7 +160,7 @@ class main_page extends StatelessWidget {
                                       Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (_) => MyApp()));
+                                              builder: (_) => postdetail()));
                                     },
                                   );
                                   separatorBuilder:
