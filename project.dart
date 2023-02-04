@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_sch_teama_project/mainpage.dart';
+import 'package:gdsc_sch_teama_project/view_myparticipation.dart';
+import 'package:gdsc_sch_teama_project/view_mywriting.dart';
+import 'package:gdsc_sch_teama_project/view_postdetail.dart';
 import 'dart:math';
-import 'package:get/get.dart';
+import 'mainpage.dart';
 
-void main() => runApp(MyApp());
+import 'package:get/get.dart';
 
 List<String> lists = [];
 String s = '';
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+class project extends StatelessWidget {
+  const project({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,12 +21,11 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false, //앱 상단에 debug 표시 삭제
         title: 'project', //앱 이름
         theme: ThemeData(
-          // 특정 색을 음영으로 가짐
+            // 특정 색을 음영으로 가짐
             primarySwatch: Colors.grey),
         home: MyHomePage());
   }
 }
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
@@ -31,6 +35,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var td = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +49,9 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(children: [
           SizedBox(height: 40),
+          Text("POSTS",
+              style: TextStyle(fontSize: 20)),
+          SizedBox(height: 10),
           ElevatedButton(
               child: Text("게시물 작성"),
               onPressed: () => Navigator.push(
@@ -50,6 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(
                     builder: (context) => Writing(),
                   ))),
+          Text(
+            td.month.toString() + "월 " + td.day.toString() + "일",
+          ),
           Expanded(
             child: ListView.separated(
               itemCount: lists.length,
@@ -81,7 +93,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 accountEmail: Text("haneul@naver.com")),
             ListTile(
               title: const Text('Home'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => main_page(),
+                    ));
+              },
             ),
             ListTile(
               title: const Text('Posts'),
@@ -94,8 +112,14 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
             ListTile(
-              title: const Text('Developer'),
-              onTap: () {},
+              title: const Text('Participate'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => view_myparticipation(),
+                    ));
+              },
             ),
             ListTile(
               title: const Text('MY'),
@@ -103,7 +127,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyPage(),
+                      builder: (context) => view_mywriting(),
                     ));
               },
             ),
@@ -163,7 +187,7 @@ class WritingState extends State<Writing> {
           ),
           SizedBox(height: 20),
           Row(children: [
-            Text('작성자 : haneul'),
+            Text('작성자 : haneul'), // 작성자 닉네임
             SizedBox(width: 30),
             IconButton(
               onPressed: () {},
@@ -299,8 +323,8 @@ class Updating extends StatelessWidget {
   }
 }
 
-class MyPage extends StatelessWidget {
-  const MyPage({Key? key}) : super(key: key);
+class MyyPage extends StatelessWidget {
+  const MyyPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
