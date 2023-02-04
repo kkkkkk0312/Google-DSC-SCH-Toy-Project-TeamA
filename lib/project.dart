@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gdsc_sch_teama_project/mainpage.dart';
 import 'package:gdsc_sch_teama_project/view_myparticipation.dart';
 import 'package:gdsc_sch_teama_project/view_mywriting.dart';
+import 'package:gdsc_sch_teama_project/view_postdetail.dart';
 import 'dart:math';
+import 'mainpage.dart';
+
 import 'package:get/get.dart';
 
 List<String> lists = [];
@@ -31,6 +34,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var td = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(children: [
           SizedBox(height: 40),
+          Text("POSTS", style: TextStyle(fontSize: 20)),
+          SizedBox(height: 10),
           ElevatedButton(
               child: Text("게시물 작성"),
               onPressed: () => Navigator.push(
@@ -50,6 +57,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   MaterialPageRoute(
                     builder: (context) => Writing(),
                   ))),
+          Text(
+            td.month.toString() + "월 " + td.day.toString() + "일",
+          ),
           Expanded(
             child: ListView.separated(
               itemCount: lists.length,
@@ -311,8 +321,8 @@ class Updating extends StatelessWidget {
   }
 }
 
-class MyPage extends StatelessWidget {
-  const MyPage({Key? key}) : super(key: key);
+class MyyPage extends StatelessWidget {
+  const MyyPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

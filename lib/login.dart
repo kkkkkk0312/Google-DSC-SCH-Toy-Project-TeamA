@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'Next_Page.dart';
 import 'SignUp.dart';
+import 'mainpage.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -27,7 +28,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Sign In'),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.grey,
           centerTitle: true,
           leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
           actions: <Widget>[
@@ -79,7 +80,7 @@ class _SignInState extends State<SignIn> {
                                     height: 50.0,
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.orangeAccent,
+                                          primary: Colors.redAccent,
                                           onPrimary: Colors.white,
                                         ),
                                         child: Icon(
@@ -95,7 +96,7 @@ class _SignInState extends State<SignIn> {
                                                 MaterialPageRoute(
                                                     builder: (BuildContext
                                                             context) =>
-                                                        id()));
+                                                        main_page()));
                                           } else if (controller.text != 'ID' ||
                                               controller2.text != '1234') {
                                             showSnackBar(context);
@@ -107,7 +108,7 @@ class _SignInState extends State<SignIn> {
                                     textStyle: TextStyle(
                                       fontSize: 18, // 글자 크기
                                     ),
-                                    primary: Colors.blue, // 지정색
+                                    primary: Colors.grey, // 지정색
                                   ),
                                   onPressed: () {
                                     Navigator.push(

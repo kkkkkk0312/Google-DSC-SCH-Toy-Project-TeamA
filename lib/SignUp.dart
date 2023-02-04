@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'Login.dart';
 
 void main() => runApp(MyApp());
@@ -35,7 +34,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Sign Up'),
-          backgroundColor: Colors.redAccent,
+          backgroundColor: Colors.grey,
           centerTitle: true,
           leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
           actions: <Widget>[
@@ -102,7 +101,7 @@ class _SignUpState extends State<SignUp> {
                                     height: 50.0,
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.orangeAccent,
+                                          primary: Colors.redAccent,
                                           onPrimary: Colors.white,
                                         ),
                                         child: Icon(
