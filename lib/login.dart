@@ -1,7 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gdsc_sch_teama_project/project.dart';
 import 'Next_Page.dart';
 import 'SignUp.dart';
 import 'mainpage.dart';
+import 'Basefile.dart';
+import 'package:dio/dio.dart';
 
 class MyApp extends StatelessWidget {
   @override
@@ -20,8 +26,12 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
-  TextEditingController controller = TextEditingController();
-  TextEditingController controller2 = TextEditingController();
+  TextEditingController emController = TextEditingController();
+  TextEditingController pwController = TextEditingController();
+
+  final _fileName = 'idpw.txt';
+  late String _path;
+  bool isLoding = true;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +40,10 @@ class _SignInState extends State<SignIn> {
           title: Text('Sign In'),
           backgroundColor: Colors.grey,
           centerTitle: true,
-          leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-          actions: <Widget>[
-            IconButton(icon: Icon(Icons.search), onPressed: () {})
-          ],
+          // leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+          // actions: <Widget>[
+          //   IconButton(icon: Icon(Icons.search), onPressed: () {})
+          // ],
         ),
         body: Builder(
           builder: (context) {
@@ -54,19 +64,19 @@ class _SignInState extends State<SignIn> {
                               primaryColor: Colors.teal,
                               inputDecorationTheme: InputDecorationTheme(
                                   labelStyle: TextStyle(
-                                      color: Colors.teal, fontSize: 15.0))),
+                                      color: Colors.grey, fontSize: 15.0))),
                           child: Container(
                             padding: EdgeInsets.all(40.0),
                             child: Column(
                               children: <Widget>[
                                 TextField(
-                                  controller: controller,
+                                  controller: emController,
                                   decoration:
                                       InputDecoration(labelText: 'Email'),
                                   keyboardType: TextInputType.emailAddress,
                                 ),
                                 TextField(
-                                  controller: controller2,
+                                  controller: pwController,
                                   decoration:
                                       InputDecoration(labelText: 'Password'),
                                   keyboardType: TextInputType.text,
@@ -80,7 +90,7 @@ class _SignInState extends State<SignIn> {
                                     height: 50.0,
                                     child: ElevatedButton(
                                         style: ElevatedButton.styleFrom(
-                                          primary: Colors.redAccent,
+                                          primary: Colors.grey,
                                           onPrimary: Colors.white,
                                         ),
                                         child: Icon(
@@ -88,18 +98,20 @@ class _SignInState extends State<SignIn> {
                                           color: Colors.white,
                                           size: 35.0,
                                         ),
-                                        onPressed: () {
-                                          if (controller.text == 'ID' &&
-                                              controller2.text == '1234') {
-                                            Navigator.push(
+                                        onPressed: () async {
+                                          if (await login(emController.text,
+                                                  pwController.text) ==
+                                              0) {
+                                            Navigator.pushAndRemoveUntil(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (BuildContext
                                                             context) =>
-                                                        main_page()));
-                                          } else if (controller.text != 'ID' ||
-                                              controller2.text != '1234') {
-                                            showSnackBar(context);
+                                                        project()),
+                                                (route) => false);
+                                          } else {
+                                            Fluttertoast.showToast(
+                                                msg: "아이디 또는 비밀번호가 올바르지 않습니다.");
                                           }
                                         })),
                                 TextButton(
@@ -127,14 +139,59 @@ class _SignInState extends State<SignIn> {
           },
         ));
   }
-}
 
-void showSnackBar(BuildContext context) {
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: const Text('로그인이나 비밀번호 정보를 다시 확인하세요.'),
-      duration: const Duration(seconds: 1),
-      action: SnackBarAction(
-        label: 'retry',
-        onPressed: () {},
-      )));
+  void showSnackBar(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: const Text('로그인이나 비밀번호 정보를 다시 확인하세요.'),
+        duration: const Duration(seconds: 1),
+        action: SnackBarAction(
+          label: 'retry',
+          onPressed: () {},
+        )));
+  }
+
+  /// 로그인 메소드
+  Future<int> login(String em, String pw) async {
+    String postURI = hostURI + 'user/login';
+    Map body = {
+      'username': em,
+      'password': pw,
+    };
+    Dio dio = Dio();
+    try {
+      print(body);
+      var response = await dio.post(postURI, data: body);
+      token = response.data['accessToken'];
+      refreshToken = response.data['refreshToken'];
+      my_email = emController.text;
+      my_name = response.data['name'];
+      await writeFile("$em\n$pw");
+      print("sucess Login");
+      return 0;
+    } catch (e) {
+      print("loginErr");
+      print(e);
+      return -1;
+    }
+  }
+
+  /// 파일 읽기
+  Future<String> readFile() async {
+    try {
+      final file = File('$_path/$_fileName');
+      return file.readAsString();
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
+  /// 파일 쓰기
+  Future<void> writeFile(String message) async {
+    try {
+      final file = File('$_path/$_fileName');
+      file.writeAsString(message);
+    } catch (e) {
+      print(e);
+    }
+  }
 }

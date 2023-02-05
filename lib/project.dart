@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gdsc_sch_teama_project/mainpage.dart';
 import 'package:gdsc_sch_teama_project/view_myparticipation.dart';
 import 'package:gdsc_sch_teama_project/view_mywriting.dart';
 import 'package:gdsc_sch_teama_project/view_postdetail.dart';
 import 'dart:math';
+import 'Basefile.dart';
+import 'Mypage.dart';
+import 'login.dart';
 import 'mainpage.dart';
+import 'package:dio/dio.dart';
 
 import 'package:get/get.dart';
 
@@ -22,18 +27,18 @@ class project extends StatelessWidget {
         theme: ThemeData(
             // 특정 색을 음영으로 가짐
             primarySwatch: Colors.grey),
-        home: MyHomePage());
+        home: MyHomePage_());
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyHomePage_ extends StatefulWidget {
+  const MyHomePage_({Key? key}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MyHomePage_> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage_> {
   var td = DateTime.now();
 
   @override
@@ -43,7 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
           title: Text('POSTS'),
           centerTitle: true,
-          backgroundColor: Colors.white24),
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.logout),
+                onPressed: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (_) => SignIn()));
+                })
+          ],
+          backgroundColor: Colors.grey),
 
       body: Center(
         child: Column(children: [
@@ -51,15 +64,15 @@ class _MyHomePageState extends State<MyHomePage> {
           Text("POSTS", style: TextStyle(fontSize: 20)),
           SizedBox(height: 10),
           ElevatedButton(
-              child: Text("게시물 작성"),
+              child: Text(
+                '게시물 작성',
+                style: TextStyle(fontSize: 20),
+              ),
               onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => Writing(),
                   ))),
-          Text(
-            td.month.toString() + "월 " + td.day.toString() + "일",
-          ),
           Expanded(
             child: ListView.separated(
               itemCount: lists.length,
@@ -105,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => MyHomePage(),
+                      builder: (context) => MyHomePage_(),
                     ));
               },
             ),
@@ -125,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => view_mywriting(),
+                      builder: (context) => Mypage(),
                     ));
               },
             ),
@@ -146,7 +159,11 @@ class Writing extends StatefulWidget {
 class WritingState extends State<Writing> {
   int count = 0;
   String sav = "not";
-  TextEditingController title = TextEditingController(text: '$s');
+  var response = hostURI + 'user/login';
+
+  TextEditingController titleController = TextEditingController(text: '$s');
+  TextEditingController contentController = TextEditingController();
+  TextEditingController maxpeopleController = TextEditingController(text: '0');
 
   @override
   Widget build(BuildContext context) {
@@ -169,7 +186,7 @@ class WritingState extends State<Writing> {
           Padding(
             padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
             child: TextField(
-              controller: title,
+              controller: titleController,
               decoration: InputDecoration(
                   labelText: 'title',
                   border: OutlineInputBorder(
@@ -185,13 +202,22 @@ class WritingState extends State<Writing> {
           ),
           SizedBox(height: 20),
           Row(children: [
-            Text('작성자 : haneul'), // 작성자 닉네임
+            Text('작성자 : ' + my_name), // 작성자 닉네임
+            SizedBox(width: 30),
+
+            TextField(
+                controller: maxpeopleController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: '참여 인원 선택',
+                )),
+
             SizedBox(width: 30),
             IconButton(
               onPressed: () {},
               icon: Icon(Icons.people),
             ),
-            Text('$count/5'),
+            Text('$count/$maxpeopleController'),
           ]),
           Padding(
             padding: EdgeInsets.fromLTRB(5, 5, 5, 5), //상하좌우 여백
@@ -200,6 +226,7 @@ class WritingState extends State<Writing> {
               // 11줄 이상 내용이 기재되어도 출력가능
               child: TextFormField(
                 maxLines: 10,
+                controller: contentController,
                 decoration: InputDecoration(
                   labelText: 'contents',
                   border: OutlineInputBorder(
@@ -210,35 +237,56 @@ class WritingState extends State<Writing> {
           ),
           Row(children: [
             ElevatedButton(
-              onPressed: () {
-                lists.add('$sav');
-                Get.to(MyHomePage());
+              onPressed: () async {
+                // lists.add('$sav');
+                if (await createRequest() == 0) {
+                  Navigator.pop(context);
+                  Fluttertoast.showToast(
+                      msg: "${titleController.text}을(를) 등록했습니다.");
+                } else {
+                  Fluttertoast.showToast(msg: "등록에 실패했습니다.");
+                }
+
+                Get.to(MyHomePage_());
               },
               child: Text("등록"),
             ),
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  count++;
-                });
+                if (count == int.parse(maxpeopleController.text)) {
+                  Fluttertoast.showToast(msg: "인원이 초과 되어 참여하실 수 없습니다.");
+                } else {
+                  setState(() {
+                    count++;
+                  });
+                }
                 // Get.to(MyHomePage());
               },
               child: Text("참여"),
             ),
             SizedBox(width: 10), //사이 띄우기
             ElevatedButton(
-              onPressed: () {
-                Get.to(Updating());
+              onPressed: () async {
+                if (await editRequest() == 0) {
+                  Navigator.pop(context);
+                  Fluttertoast.showToast(msg: "해당 항을(를) 수정했습니다.");
+                } else {
+                  Fluttertoast.showToast(msg: "수정에 실패했습니다.");
+                }
+                Get.to(MyHomePage_());
               },
               child: Text("수정"),
             ),
             SizedBox(width: 10),
             ElevatedButton(
-              onPressed: () {
-                print('$sav');
-                lists.remove('$s');
-                Get.to(MyHomePage());
+              onPressed: () async {
+                if (await deleteRequest() == 0) {
+                  Navigator.pop(context);
+                  Fluttertoast.showToast(
+                      msg: "${titleController.text}을(를) 삭제했습니다.");
+                }
+                Get.to(MyHomePage_());
               },
               child: Text("삭제"),
             ),
@@ -246,6 +294,80 @@ class WritingState extends State<Writing> {
         ],
       ),
     );
+  }
+
+  // 수정
+  Future<int> editRequest() async {
+    if (titleController.text == "") {
+      return -1;
+    }
+    Dio dio = Dio();
+    String createRequestURI = hostURI + 'post/update';
+    Map body = {
+      'id': postid_num,
+      'title': titleController.text.toString(),
+      'contents': contentController.text.toString(),
+      'recruitmentNum': int.parse(maxpeopleController.text)
+    };
+
+    dio.options.headers['jwt-auth-token'] = token;
+    dio.options.headers['jwt-auth-refresh-token'] = refreshToken;
+    try {
+      var response = await dio.put(createRequestURI, data: body);
+      print('====================');
+      print('sucess recruit');
+      return 0;
+    } catch (e) {
+      print('====================');
+      print('create recruit Err');
+      return -1;
+    }
+  }
+
+  //생성
+  Future<int> createRequest() async {
+    // 제목 입력 안하면
+    if (titleController.text == "") {
+      return -1;
+    }
+    String createRequestURI = hostURI + 'post/save';
+    Map body = {
+      'userid': 1,
+      'title': titleController.text.toString(),
+      'contents': contentController.text.toString(),
+      'recruitmentNum': int.parse(maxpeopleController.text)
+    };
+    Dio dio = Dio();
+    dio.options.headers['jwt-auth-token'] = token;
+    dio.options.headers['jwt-auth-refresh-token'] = refreshToken;
+    try {
+      var response = await dio.post(createRequestURI, data: body);
+      print('====================');
+      print('sucess createRequest');
+      return 0;
+    } catch (e) {
+      print('====================');
+      print('createRequestErr');
+      return -1;
+    }
+  }
+
+  /// 삭제
+  Future<int> deleteRequest() async {
+    String deleteRequest = hostURI + 'post/{postId}/delete';
+
+    Dio dio = Dio();
+    dio.options.headers['jwt-auth-token'] = token;
+    dio.options.headers['jwt-auth-refresh-token'] = refreshToken;
+    try {
+      var res = await dio.delete(deleteRequest);
+      print('success deleteRequest');
+      return 0;
+    } catch (e) {
+      print("====================");
+      print('deleteRequestErr');
+    }
+    return -1;
   }
 }
 
@@ -289,14 +411,14 @@ class Updating extends StatelessWidget {
           Row(children: [
             ElevatedButton(
               onPressed: () {
-                Get.to(MyHomePage());
+                Get.to(MyHomePage_());
               },
               child: Text("등록"),
             ),
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                Get.off(MyHomePage());
+                Get.off(MyHomePage_());
               },
               child: Text("참여"),
             ),
@@ -310,7 +432,7 @@ class Updating extends StatelessWidget {
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                Get.off(MyHomePage());
+                Get.off(MyHomePage_());
               },
               child: Text("삭제"),
             ),

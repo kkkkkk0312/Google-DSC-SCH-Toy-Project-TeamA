@@ -4,7 +4,6 @@ import 'package:gdsc_sch_teama_project/view_myparticipation.dart';
 import 'package:gdsc_sch_teama_project/view_mywriting.dart';
 import 'dart:math';
 import 'package:get/get.dart';
-import 'package:gdsc_sch_teama_project/view_postdetail.dart';
 
 List<String> lists = [];
 String s = '';

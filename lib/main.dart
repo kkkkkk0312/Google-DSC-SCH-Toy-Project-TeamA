@@ -9,7 +9,7 @@ import 'mainpage.dart';
 import 'testp.dart';
 import 'project.dart';
 import 'package:flutter/cupertino.dart';
-import 'getMediaQuery.dart';
+import 'Basefile.dart';
 import 'package:flutter/material.dart';
 
 // 각 페이지들 import
