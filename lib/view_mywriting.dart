@@ -1,10 +1,18 @@
+import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gdsc_sch_teama_project/project.dart';
 import 'package:gdsc_sch_teama_project/view_postdetail.dart';
+import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'Mypage.dart';
+import 'login.dart';
+import 'mainpage.dart';
+import 'view_myparticipation.dart';
 import 'view_postdetail.dart';
 import 'main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'getMediaQuery.dart';
+import 'Basefile.dart';
 
 class view_mywriting extends StatefulWidget {
   const view_mywriting({super.key});
@@ -18,7 +26,7 @@ class _MyWidgetState extends State<view_mywriting> {
 
   final List<String> mytitle = <String>[
     'AI 개발할 팀원 구합니다.',
-    '간단한 계시판 만들 팀원 구해요.',
+    '간단한 게시판 만들 팀원 구해요.',
     '같이 다이어리 어플 만드실 팀원 구합니다.',
     '앱 배포까지 함께갈 팀원 구해요.'
   ];
@@ -27,14 +35,14 @@ class _MyWidgetState extends State<view_mywriting> {
     '모바일 보드게임 만드실 팀원 구합니다.',
     '함께 런닝 보조 어플 만들어 보실 분 구해요.',
     '초보여도 상관 없습니다. flutter 같이 공부하실 분 찾습니다.',
-    '간단한 계시판 만들 팀원 구해요.',
+    '간단한 게시판 만들 팀원 구해요.',
     '같이 다이어리 어플 만드실 팀원 구합니다.',
     '앱 배포까지 함께갈 팀원 구해요.'
   ];
   final List<String> participate_title = <String>[
     'AI 개발할 팀원 구합니다.',
     '모바일 보드게임 만드실 팀원 구합니다.',
-    '간단한 계시판 만들 팀원 구해요.',
+    '간단한 게시판 만들 팀원 구해요.',
     '같이 다이어리 어플 만드실 팀원 구합니다.',
     '앱 배포까지 함께갈 팀원 구해요.'
   ];
@@ -109,24 +117,72 @@ class _MyWidgetState extends State<view_mywriting> {
   Widget build(BuildContext context) => Container(
         // 상태바 높이만큼 띄우기
         margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        // 배경 이미지 적용
-        decoration: BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.fill,
-                image: AssetImage('assets/img/background.png'))),
         child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: PreferredSize(
-              preferredSize:
-                  Size.fromHeight(getMobileSizeFromPercent(context, 18, false)),
-              child: Container(
-                color: Colors.transparent,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                ),
+            //backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              title: Text('작성 게시물'),
+              backgroundColor: Colors.grey,
+              centerTitle: true,
+              // leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
+              actions: <Widget>[
+                IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      Navigator.push(
+                          context, MaterialPageRoute(builder: (_) => SignIn()));
+                    })
+              ],
+            ),
+            drawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  UserAccountsDrawerHeader(
+                      accountName: Text('HANEUL LEE'),
+                      accountEmail: Text("haneul@naver.com")),
+                  ListTile(
+                    title: const Text('Home'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => main_page(),
+                          ));
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Posts'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MyHomePage_(),
+                          ));
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('Participate'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => view_myparticipation(),
+                          ));
+                    },
+                  ),
+                  ListTile(
+                    title: const Text('MY'),
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Mypage(),
+                          ));
+                    },
+                  ),
+                ],
               ),
             ),
-
             // Body
             body: GestureDetector(
               // onTap: () {},
@@ -148,7 +204,7 @@ class _MyWidgetState extends State<view_mywriting> {
                                   td.day.toString() +
                                   "일",
                               style: TextStyle(fontSize: titleFontSize)),
-                          Text("\작성 계시물 보기",
+                          Text("\작성 게시물 보기",
                               style: TextStyle(fontSize: titleFontSize)),
                           Container(
                             height: 5,
@@ -176,7 +232,7 @@ class _MyWidgetState extends State<view_mywriting> {
                                       mytitle[index],
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(fontSize: 18),
+                                      style: TextStyle(fontSize: 16),
                                     ),
                                     onTap: () {
                                       Navigator.push(
@@ -305,4 +361,22 @@ class _MyWidgetState extends State<view_mywriting> {
                   )),
             )),
       );
+
+  /// 삭제
+  Future<int> deleteRequest() async {
+    String deleteRequest = hostURI + 'post/{postId}/delete';
+
+    Dio dio = Dio();
+    dio.options.headers['jwt-auth-token'] = token;
+    dio.options.headers['jwt-auth-refresh-token'] = refreshToken;
+    try {
+      var res = await dio.delete(deleteRequest);
+      print('success deleteRequest');
+      return 0;
+    } catch (e) {
+      print("====================");
+      print('deleteRequestErr');
+    }
+    return -1;
+  }
 }

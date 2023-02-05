@@ -9,7 +9,7 @@ import 'mainpage.dart';
 import 'testp.dart';
 import 'project.dart';
 import 'package:flutter/cupertino.dart';
-import 'getMediaQuery.dart';
+import 'Basefile.dart';
 import 'package:flutter/material.dart';
 
 // 각 페이지들 import
@@ -23,13 +23,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
+//SignIn
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});

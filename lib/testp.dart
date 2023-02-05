@@ -1,7 +1,7 @@
 import 'main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'getMediaQuery.dart';
+import 'Basefile.dart';
 
 class testp extends StatefulWidget {
   const testp({super.key});
