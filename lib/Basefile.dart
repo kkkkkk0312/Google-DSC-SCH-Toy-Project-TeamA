@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 String hostURI = 'http://15.165.105.176:8080/';
 String token = '';
 String refreshToken = '';
-String my_email = '';
-String my_name = '';
+String my_email = 'hong123@gmail.';
+String my_name = '홍길동';
 int postid_num = 1;
 
 /// 모바일 화면 구하는 함수(context, 변환하고자 하는 퍼센테이지, 가로,세로 여부/가로 true, 세로: false)

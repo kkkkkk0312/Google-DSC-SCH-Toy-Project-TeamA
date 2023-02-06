@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gdsc_sch_teama_project/project.dart';
+import 'package:gdsc_sch_teama_project/Writing.dart';
 import 'package:gdsc_sch_teama_project/view_postdetail.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -138,8 +138,7 @@ class _MyWidgetState extends State<view_mywriting> {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   UserAccountsDrawerHeader(
-                      accountName: Text('HANEUL LEE'),
-                      accountEmail: Text("haneul@naver.com")),
+                      accountName: Text(my_name), accountEmail: Text(my_email)),
                   ListTile(
                     title: const Text('Home'),
                     onTap: () {
@@ -147,16 +146,6 @@ class _MyWidgetState extends State<view_mywriting> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => main_page(),
-                          ));
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Posts'),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MyHomePage_(),
                           ));
                     },
                   ),

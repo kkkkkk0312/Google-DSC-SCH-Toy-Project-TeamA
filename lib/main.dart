@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gdsc_sch_teama_project/Login.dart';
 import 'package:gdsc_sch_teama_project/SignUp.dart';
 import 'package:gdsc_sch_teama_project/mainpage.dart';
-import 'package:gdsc_sch_teama_project/testp.dart';
 import 'view_mywriting.dart';
 import 'view_myparticipation.dart';
 import 'mainpage.dart';
-import 'testp.dart';
-import 'project.dart';
+import 'Writing.dart';
 import 'package:flutter/cupertino.dart';
 import 'Basefile.dart';
 import 'package:flutter/material.dart';
@@ -77,15 +75,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => testp()));
+                        context, MaterialPageRoute(builder: (_) => Writing()));
                   },
-                  child: Text("testp")),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => project()));
-                  },
-                  child: Text("project")),
+                  child: Text("writing")),
               ElevatedButton(
                   onPressed: () {
                     Navigator.push(

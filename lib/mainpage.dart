@@ -1,4 +1,6 @@
-import 'package:gdsc_sch_teama_project/project.dart';
+import 'package:dio/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gdsc_sch_teama_project/Writing.dart';
 import 'package:gdsc_sch_teama_project/view_myparticipation.dart';
 import 'package:gdsc_sch_teama_project/view_mywriting.dart';
 import 'package:gdsc_sch_teama_project/view_postdetail.dart';
@@ -76,8 +78,7 @@ class main_page extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   UserAccountsDrawerHeader(
-                      accountName: Text('HANEUL LEE'),
-                      accountEmail: Text("haneul@naver.com")),
+                      accountName: Text(my_name), accountEmail: Text(my_email)),
                   ListTile(
                     title: const Text('Home'),
                     onTap: () {
@@ -85,16 +86,6 @@ class main_page extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => main_page(),
-                          ));
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Posts'),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MyHomePage_(),
                           ));
                     },
                   ),
@@ -331,4 +322,63 @@ class main_page extends StatelessWidget {
                   )),
             )),
       );
+
+  /// main 정보 받아옴
+  // Future<int> getMain(String today) async {
+  //   String getMainURI = hostURI + 'post';
+  //   Dio dio = Dio();
+  //   dio.options.headers['jwt-auth-token'] = token;
+  //   dio.options.headers['jwt-auth-refresh-token'] = refreshToken;
+  //   try {
+  //     var res = await dio.get(getMainURI);
+
+  //     // 모든 리스트 초기화
+  //     total_title.clear();
+
+  //     // // goal List 추가
+  //     for (Map goal in res.data['goalResponseList']['goal']) {
+  //       setState(() {
+  //         if (goal['goal_status'] == "OFF") {
+  //           total_title
+  //               .add(Title(Title['title'], Title['title_id']));
+  //           // goal 알림 추가
+  //           if (goal['alert_status'] == "ON") {
+  //             List ls = goal['alert_time'].split(':');
+  //             registerMessage(
+  //                 notificationId: goal['goal_id'] * -1,
+  //                 year: DateTime.now().year,
+  //                 month: DateTime.now().month,
+  //                 day: DateTime.now().day,
+  //                 hour: int.parse(ls[0]),
+  //                 minutes: int.parse(
+  //                   ls[1],
+  //                 ),
+  //                 message: goal['title'],
+  //                 target: "goal");
+  //             print('addAlert: ' + DateTime.now().toString());
+  //           }
+  //         }
+  //       });
+  //     }
+
+  //     print("====================");
+  //     print('sucess getMainData');
+  //     return 0;
+  //   } catch (e) {
+  //     print("====================");
+  //     print("getMainDataErr");
+  //     Fluttertoast.showToast(msg: "정보를 받아오지 못했습니다.");
+  //   }
+  //   return -1;
+  // }
 }
+
+// class Title {
+//   String title = '';
+//   int title_Id = -1;
+
+//   Title(String title, id) {
+//     this.title = title;
+//     this.title_Id = id;
+//   }
+// }

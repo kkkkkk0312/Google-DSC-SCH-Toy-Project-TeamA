@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gdsc_sch_teama_project/Basefile.dart';
 import 'package:gdsc_sch_teama_project/mainpage.dart';
 import 'package:gdsc_sch_teama_project/view_myparticipation.dart';
 import 'package:gdsc_sch_teama_project/view_mywriting.dart';
 import 'dart:math';
 import 'package:get/get.dart';
+
+import 'view_participation.dart';
 
 List<String> lists = [];
 String s = '';
@@ -32,7 +35,8 @@ class view_postdetail extends State<postdetail> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  //Get.to(MyHomePage());
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => participant()));
                 },
                 child: Text("참여 인원 보기"),
               ),
@@ -57,7 +61,7 @@ class view_postdetail extends State<postdetail> {
           ),
           SizedBox(height: 20),
           Row(children: [
-            Text('작성자 : haneul'),
+            Text('작성자 : ' + my_name),
             SizedBox(width: 30),
             IconButton(
               onPressed: () {},
@@ -84,14 +88,15 @@ class view_postdetail extends State<postdetail> {
             ElevatedButton(
               onPressed: () {
                 lists.add('$sav');
-                Get.to(main_page());
+                count++;
+                Navigator.pop(context);
               },
               child: Text("참여"),
             ),
             SizedBox(width: 10), //사이 띄우기
             ElevatedButton(
               onPressed: () {
-                Get.to(main_page());
+                Navigator.pop(context);
               },
               child: Text("취소"),
             ),

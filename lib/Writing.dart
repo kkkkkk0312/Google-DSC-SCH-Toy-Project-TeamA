@@ -13,141 +13,10 @@ import 'package:dio/dio.dart';
 
 import 'package:get/get.dart';
 
+import 'view_participation.dart';
+
 List<String> lists = [];
 String s = '';
-
-class project extends StatelessWidget {
-  const project({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-        debugShowCheckedModeBanner: false, //앱 상단에 debug 표시 삭제
-        title: 'project', //앱 이름
-        theme: ThemeData(
-            // 특정 색을 음영으로 가짐
-            primarySwatch: Colors.grey),
-        home: MyHomePage_());
-  }
-}
-
-class MyHomePage_ extends StatefulWidget {
-  const MyHomePage_({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePage_> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage_> {
-  var td = DateTime.now();
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //여러가지를 배치하다.
-      appBar: AppBar(
-          title: Text('POSTS'),
-          centerTitle: true,
-          actions: <Widget>[
-            IconButton(
-                icon: Icon(Icons.logout),
-                onPressed: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (_) => SignIn()));
-                })
-          ],
-          backgroundColor: Colors.grey),
-
-      body: Center(
-        child: Column(children: [
-          SizedBox(height: 40),
-          Text("POSTS", style: TextStyle(fontSize: 20)),
-          SizedBox(height: 10),
-          ElevatedButton(
-              child: Text(
-                '게시물 작성',
-                style: TextStyle(fontSize: 20),
-              ),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Writing(),
-                  ))),
-          Expanded(
-            child: ListView.separated(
-              itemCount: lists.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    s = lists[index];
-                    print('$s');
-                    Get.to(Writing());
-                  },
-                  title: Text(lists[index]),
-                  leading: Text('-'),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider();
-              },
-            ),
-          ),
-        ]),
-      ),
-
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-                accountName: Text('HANEUL LEE'),
-                accountEmail: Text("haneul@naver.com")),
-            ListTile(
-              title: const Text('Home'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => main_page(),
-                    ));
-              },
-            ),
-            ListTile(
-              title: const Text('Posts'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MyHomePage_(),
-                    ));
-              },
-            ),
-            ListTile(
-              title: const Text('Participate'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => view_myparticipation(),
-                    ));
-              },
-            ),
-            ListTile(
-              title: const Text('MY'),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => Mypage(),
-                    ));
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class Writing extends StatefulWidget {
   const Writing({Key? key}) : super(key: key);
@@ -161,7 +30,7 @@ class WritingState extends State<Writing> {
   String sav = "not";
   var response = hostURI + 'user/login';
 
-  TextEditingController titleController = TextEditingController(text: '$s');
+  TextEditingController titleController = TextEditingController();
   TextEditingController contentController = TextEditingController();
   TextEditingController maxpeopleController = TextEditingController(text: '0');
 
@@ -177,7 +46,8 @@ class WritingState extends State<Writing> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  //Get.to(MyHomePage());
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (_) => participant()));
                 },
                 child: Text("참여 인원 보기"),
               ),
@@ -247,7 +117,7 @@ class WritingState extends State<Writing> {
                   Fluttertoast.showToast(msg: "등록에 실패했습니다.");
                 }
 
-                Get.to(MyHomePage_());
+                Get.to(main_page());
               },
               child: Text("등록"),
             ),
@@ -274,7 +144,7 @@ class WritingState extends State<Writing> {
                 } else {
                   Fluttertoast.showToast(msg: "수정에 실패했습니다.");
                 }
-                Get.to(MyHomePage_());
+                Get.to(main_page());
               },
               child: Text("수정"),
             ),
@@ -286,7 +156,7 @@ class WritingState extends State<Writing> {
                   Fluttertoast.showToast(
                       msg: "${titleController.text}을(를) 삭제했습니다.");
                 }
-                Get.to(MyHomePage_());
+                Get.to(main_page());
               },
               child: Text("삭제"),
             ),
@@ -411,14 +281,14 @@ class Updating extends StatelessWidget {
           Row(children: [
             ElevatedButton(
               onPressed: () {
-                Get.to(MyHomePage_());
+                Get.to(main_page());
               },
               child: Text("등록"),
             ),
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                Get.off(MyHomePage_());
+                Get.off(main_page());
               },
               child: Text("참여"),
             ),
@@ -432,7 +302,7 @@ class Updating extends StatelessWidget {
             SizedBox(width: 10),
             ElevatedButton(
               onPressed: () {
-                Get.off(MyHomePage_());
+                Get.off(main_page());
               },
               child: Text("삭제"),
             ),
@@ -443,21 +313,21 @@ class Updating extends StatelessWidget {
   }
 }
 
-class MyyPage extends StatelessWidget {
-  const MyyPage({Key? key}) : super(key: key);
+// class MyyPage extends StatelessWidget {
+//   const MyyPage({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      //여러가지를 배치하다.
-      appBar: AppBar(
-          title: Text('MY'),
-          centerTitle: true,
-          backgroundColor: Colors.white24),
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       //여러가지를 배치하다.
+//       appBar: AppBar(
+//           title: Text('MY'),
+//           centerTitle: true,
+//           backgroundColor: Colors.white24),
 
-      body: const Center(
-        child: Text('MY Page!'),
-      ),
-    );
-  }
-}
+//       body: const Center(
+//         child: Text('MY Page!'),
+//       ),
+//     );
+//   }
+// }

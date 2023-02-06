@@ -1,5 +1,5 @@
 import 'package:gdsc_sch_teama_project/mainpage.dart';
-import 'package:gdsc_sch_teama_project/project.dart';
+import 'package:gdsc_sch_teama_project/Writing.dart';
 import 'package:gdsc_sch_teama_project/view_postdetail.dart';
 
 import 'Mypage.dart';
@@ -70,8 +70,7 @@ class view_myparticipation extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 children: <Widget>[
                   UserAccountsDrawerHeader(
-                      accountName: Text('HANEUL LEE'),
-                      accountEmail: Text("haneul@naver.com")),
+                      accountName: Text(my_name), accountEmail: Text(my_email)),
                   ListTile(
                     title: const Text('Home'),
                     onTap: () {
@@ -79,16 +78,6 @@ class view_myparticipation extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (context) => main_page(),
-                          ));
-                    },
-                  ),
-                  ListTile(
-                    title: const Text('Posts'),
-                    onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MyHomePage_(),
                           ));
                     },
                   ),

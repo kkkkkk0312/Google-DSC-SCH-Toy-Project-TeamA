@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gdsc_sch_teama_project/project.dart';
+import 'Writing.dart';
 import 'Next_Page.dart';
 import 'SignUp.dart';
 import 'mainpage.dart';
@@ -107,7 +107,7 @@ class _SignInState extends State<SignIn> {
                                                 MaterialPageRoute(
                                                     builder: (BuildContext
                                                             context) =>
-                                                        project()),
+                                                        Writing()),
                                                 (route) => false);
                                           } else {
                                             Fluttertoast.showToast(
